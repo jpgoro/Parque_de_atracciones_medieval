@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 
 import jdbc.ConnectionProvider;
+import model.TipoAtraccion;
 import model.Usuario;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -33,30 +34,30 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public int delete(Usuario usuario) {
 		try {
-		String sql = "DELETE FROM Usuarios WHERE dni = ? ";
-		Connection conn = ConnectionProvider.getConnection();
-		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setInt(1, usuario.getDni());
-		int rows = statement.executeUpdate();
-		return rows;
-		}catch (Exception e) {
+			String sql = "DELETE FROM Usuarios WHERE dni = ? ";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, usuario.getDni());
+			int rows = statement.executeUpdate();
+			return rows;
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
 	public int updatePresupuestoYTiempoDisponible(Usuario usuario) {
 		try {
-		String sql = "UPDATE USUARIOS SET tiempo_dispobile = ?, presupuesto = ? WHERE dni = ? ";
-		Connection conn = ConnectionProvider.getConnection();
-		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setDouble(1, usuario.getTiempoDisponible());
-		statement.setDouble(2, usuario.getPresupuesto());
-		statement.setInt(3, usuario.getDni());
+			String sql = "UPDATE USUARIOS SET tiempo_dispobile = ?, presupuesto = ? WHERE dni = ? ";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setDouble(1, usuario.getTiempoDisponible());
+			statement.setDouble(2, usuario.getPresupuesto());
+			statement.setInt(3, usuario.getDni());
 
-		int rows = statement.executeUpdate();
+			int rows = statement.executeUpdate();
 
-		return rows;
-		}catch (Exception e) {
+			return rows;
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
@@ -64,36 +65,36 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public LinkedList<Usuario> findAll() {
 		try {
-		String sql = "SELECT * FROM Usuarios";
-		Connection conn = ConnectionProvider.getConnection();
-		PreparedStatement statement = conn.prepareStatement(sql);
-		ResultSet resultado = statement.executeQuery();
+			String sql = "SELECT * FROM Usuarios";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet resultado = statement.executeQuery();
 
-		LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
-		while (resultado.next()) {
-			usuarios.add(toUsuario(resultado));
-		}
-		return usuarios;
-		}catch (Exception e) {
+			LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
+			while (resultado.next()) {
+				usuarios.add(toUsuario(resultado));
+			}
+			return usuarios;
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
-	public Usuario findByDni(int dni)  {
+	public Usuario findByDni(int dni) {
 		try {
-		String sql = "SELECT * FROM usuarios WHERE dni = ?";
-		Connection conn = ConnectionProvider.getConnection();
-		PreparedStatement statement = conn.prepareStatement(sql);
-		statement.setInt(1, dni);
-		ResultSet resultado = statement.executeQuery();
+			String sql = "SELECT * FROM usuarios WHERE dni = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, dni);
+			ResultSet resultado = statement.executeQuery();
 
-		Usuario usuario = null;
+			Usuario usuario = null;
 
-		if (resultado.next()) {
-			usuario = toUsuario(resultado);
-		}
-		return usuario;
-		}catch (Exception e) {
+			if (resultado.next()) {
+				usuario = toUsuario(resultado);
+			}
+			return usuario;
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
@@ -101,25 +102,27 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public int countAll() {
 		try {
-		String sql = "SELECT COUNT(1) AS TOTAL FROM usuarios";
-		Connection conn = ConnectionProvider.getConnection();
-		PreparedStatement statement = conn.prepareStatement(sql);
-		ResultSet resultado = statement.executeQuery();
+			String sql = "SELECT COUNT(1) AS TOTAL FROM usuarios";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet resultado = statement.executeQuery();
 
-		resultado.next();
-		int total = resultado.getInt("TOTAL");
+			resultado.next();
+			int total = resultado.getInt("TOTAL");
 
-		return total;
-		}catch (Exception e) {
+			return total;
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
 
 	private Usuario toUsuario(ResultSet resultados) {
 		try {
-		return new Usuario(resultados.getInt(1), resultados.getString(2), resultados.getDouble(3),
-				resultados.getDouble(4));
-		}catch (Exception e) {
+			TipoAtraccion tipoAtraccion = TipoAtraccion.valueOf(resultados.getString(1));
+			// parametros: dni, Nombre, Presupuesto, tiempoDisponible, tipo de atraccion
+			return new Usuario(resultados.getInt(2), resultados.getString(3), resultados.getDouble(4),
+					resultados.getDouble(5), tipoAtraccion);
+		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
 	}
@@ -131,7 +134,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 
 	@Override
-	public Usuario findByNombre(String nombre)  {
+	public Usuario findByNombre(String nombre) {
 		// TODO Auto-generated method stub
 		return null;
 	}

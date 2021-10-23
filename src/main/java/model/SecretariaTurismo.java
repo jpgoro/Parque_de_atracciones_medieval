@@ -6,6 +6,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import dao.AtraccionDAO;
+import dao.DAOFactory;
+import dao.UsuarioDAO;
+
 public class SecretariaTurismo {
 	private static List<Usuario>    usuarios 	= new LinkedList<Usuario>();
 	private static List<Atraccion>  atracciones = new LinkedList<Atraccion>(); 
@@ -15,8 +19,12 @@ public class SecretariaTurismo {
 	public static void main(String[] args) throws Exception {
 		
 		// Levanto los datos desde los archivos
-		usuarios    = AdministradorArchivos.leerUsuarios();
-		atracciones = AdministradorArchivos.leerAtracciones();
+		UsuarioDAO usuarioDAO = DAOFactory.getUsuarioDAO();
+		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionesDAO();
+		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
+		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
+	//	usuarios    = AdministradorArchivos.leerUsuarios();
+	//	atracciones = AdministradorArchivos.leerAtracciones();
 		promociones = AdministradorArchivos.leerPromociones();
 
 		// Preparo para leer desde la consola 
