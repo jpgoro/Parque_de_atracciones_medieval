@@ -8,6 +8,7 @@ import java.util.Scanner;
 
 import dao.AtraccionDAO;
 import dao.DAOFactory;
+import dao.PromocionDAO;
 import dao.UsuarioDAO;
 
 public class SecretariaTurismo {
@@ -21,11 +22,13 @@ public class SecretariaTurismo {
 		// Levanto los datos desde los archivos
 		UsuarioDAO usuarioDAO = DAOFactory.getUsuarioDAO();
 		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionesDAO();
+		PromocionDAO promocionDAO = DAOFactory.getPromocionesDAO();
 		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
 		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
+		promociones= promocionDAO.findAll();
 	//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();
-		promociones = AdministradorArchivos.leerPromociones();
+	//	promociones = AdministradorArchivos.leerPromociones();
 
 		// Preparo para leer desde la consola 
 		Scanner in = new Scanner(System.in);

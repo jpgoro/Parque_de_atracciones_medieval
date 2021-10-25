@@ -12,9 +12,9 @@ import model.Promocion;
 import model.PromocionAbsoluta;
 import model.PromocionAxB;
 import model.PromocionPorcentual;
-import model.SecretariaTurismo;
+
 import model.TipoAtraccion;
-import model.Usuario;
+
 
 public class PromocionDAOImpl implements PromocionDAO {
 
@@ -37,6 +37,7 @@ public class PromocionDAOImpl implements PromocionDAO {
 	}
 
 	private Promocion toPromocion(ResultSet resultados) {
+		Promocion promo = null;
 		// List<Promocion> promociones = null;
 		try {
 			// promociones = new LinkedList<Promocion>();
@@ -56,22 +57,23 @@ public class PromocionDAOImpl implements PromocionDAO {
 			switch (tipoPromocion) {
 			case 1: {// Absuluta
 				double dtoTotal = resultados.getDouble(5);
-				return new PromocionAbsoluta(tipoAtraccion, resultados.getString(3),
+				promo= new PromocionAbsoluta(tipoAtraccion, resultados.getString(3),
 						traerLasAtracciones(resultados.getInt(2)), dtoTotal);
 			}
 			case 2: {// AxB
-				return new PromocionAxB(tipoAtraccion, resultados.getString(3),
+				promo = new PromocionAxB(tipoAtraccion, resultados.getString(3),
 						traerLasAtracciones(resultados.getInt(2)), traerLasAtraccionesGratis(resultados.getInt(1)));
 			}
 			case 3: {// Porcentual
 				double porcentajeDto = resultados.getDouble(5);
-				return new PromocionPorcentual(tipoAtraccion, resultados.getString(3),
+				promo = new PromocionPorcentual(tipoAtraccion, resultados.getString(3),
 						traerLasAtracciones(resultados.getInt(2)), porcentajeDto);
 			}
 			}
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
+		return promo;
 	}
 
 	private List<Atraccion> traerLasAtraccionesGratis(int idPromocion) {
@@ -80,7 +82,7 @@ public class PromocionDAOImpl implements PromocionDAO {
 					+ "from Promociones\r\n"
 					+ "inner JOIN atracciones_gratis_en_promo on atracciones_gratis_en_promo.id_promocion = Promociones.id\r\n"
 					+ "inner JOIN Atracciones on Atracciones.id = atracciones_gratis_en_promo.id_atraccion\r\n"
-					+ "where Promociones.tipo_promocion values ?\r\n" + "";
+					+ "where Promociones.tipo_promocion = ?\r\n" + "";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, idPromocion);
@@ -102,7 +104,7 @@ public class PromocionDAOImpl implements PromocionDAO {
 					+ "from Promociones\r\n"
 					+ "inner JOIN atracciones_en_promo on atracciones_en_promo.id_promocion = Promociones.id\r\n"
 					+ "inner JOIN Atracciones on Atracciones.id = atracciones_en_promo.id_atraccion\r\n"
-					+ "where Promociones.tipo_promocion values ?\r\n" + "";
+					+ "where Promociones.tipo_promocion = ?\r\n" + "";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setInt(1, idTipoPromo);
