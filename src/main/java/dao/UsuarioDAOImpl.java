@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 
 import jdbc.ConnectionProvider;
+import model.Sugerencia;
 import model.TipoAtraccion;
+
 import model.Usuario;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -124,31 +126,11 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	
 			switch (tipoAtracciones) {
 			case 1:{
-				tipoAtraccion = TipoAtraccion.AVENTURA;
-// borrar estas salidas por pantalla - son para probar
-				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
-				System.out.println("Id "+ resultados.getInt(1));
-				System.out.println("DNI "+ resultados.getInt(2));
-				System.out.println("Presupuesto "+ resultados.getDouble(3));
-				System.out.println("Tiempo Dispobible "+ resultados.getDouble(4));
-				System.out.println("Usuario nombre "+ resultados.getString(3));}
+				tipoAtraccion = TipoAtraccion.AVENTURA;}
 			case 2:{
-				tipoAtraccion = TipoAtraccion.DEGUSTACION;
-				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
-				System.out.println("Id "+ resultados.getInt(1));
-				System.out.println("DNI "+ resultados.getInt(2));
-				System.out.println("Usuario nombre "+ resultados.getString(3));
-				System.out.println("Presupuesto "+ resultados.getDouble(4));
-				System.out.println("Tiempo Dispobible "+ resultados.getDouble(5));}
+				tipoAtraccion = TipoAtraccion.DEGUSTACION;}
 			case 3:{
-				tipoAtraccion = TipoAtraccion.PAISAJE;
-				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
-				System.out.println("Id "+ resultados.getInt(1));
-				System.out.println("DNI "+ resultados.getInt(2));
-				System.out.println("Usuario nombre "+ resultados.getString(3));
-				System.out.println("Presupuesto "+ resultados.getDouble(4));
-				System.out.println("Tiempo Dispobible "+ resultados.getDouble(5));
-				}
+				tipoAtraccion = TipoAtraccion.PAISAJE;}
 			}
 			// parametros: dni, Nombre, Presupuesto, tiempoDisponible, tipo de atraccion
 			return new Usuario(resultados.getInt(2), resultados.getString(3), resultados.getDouble(4),
@@ -159,11 +141,41 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	}
 	
 	
+	public boolean aceptarSugerencia(Usuario usuario, Sugerencia nueva) {
+		boolean agregada = false;
+		if(puedoAceptar(usuario, nueva)) {			
+			usuario.setPresupuesto(usuario.getPresupuesto()-nueva.getCosto());
+			usuario.setTiempoDisponible(usuario.getTiempoDisponible()-nueva.getTiempoRequerido());
+			this.update(usuario);
+	//		agregada = itinerarioPersonal.aceptarSugerencia(nueva);// hay que hacer este metodo para la tabla itinerario
+		}		
+		return agregada;
+	}
 
+	private boolean puedoAceptar(Usuario usuario, Sugerencia sugerencia) {
+		Usuario unUsuario = null;
+		unUsuario = this.findByDni(usuario.getDni());
+		return unUsuario.getTiempoDisponible() >= sugerencia.getTiempoRequerido()
+				&& unUsuario.getPresupuesto() >= sugerencia.getCosto();
+	}
+	
+		
 	@Override
-	public int update(Usuario t) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(Usuario usuario) {
+		try {
+			String sql = "UPDATE USUARIOS SET (PRESUPUESTO,TIEMPO_DISPONIBLE) = (?,?) WHERE DNI = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setDouble(1, usuario.getPresupuesto());
+			statement.setDouble(2, usuario.getTiempoDisponible());
+			statement.setInt(3, usuario.getDni());
+			int rows = statement.executeUpdate();
+
+			return rows;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	@Override

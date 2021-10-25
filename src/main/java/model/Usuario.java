@@ -33,6 +33,13 @@ public class Usuario {
 	}
 	
 
+	
+
+	public void setTiempoDisponible(double tiempoDisponible) {
+		this.tiempoDisponible = tiempoDisponible;
+	}
+	
+	
 	public void imprimirSugerencias(List<Sugerencia> sugerencias) {
 		System.out.println("\n• MOSTRANDO SUGERIDAS:");
 		for(Sugerencia sugerencia : sugerencias) {
@@ -43,6 +50,7 @@ public class Usuario {
 	public boolean aceptarSugerencia(Sugerencia nueva) {
 		boolean agregada = false;
 		if(puedoAceptar(nueva)) {
+			
 			this.presupuesto -= nueva.getCosto();
 			this.tiempoDisponible -= nueva.getTiempoRequerido();
 			
@@ -114,5 +122,10 @@ public class Usuario {
 	public int idAtraccionPreferida() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public void setPresupuesto(double presupuesto) {
+		this.presupuesto = presupuesto;
+		
 	}
 }

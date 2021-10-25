@@ -62,7 +62,7 @@ public class SecretariaTurismo {
 				opcion = in.next();
 				switch(opcion) {
 					case "s":
-						if(usuario.aceptarSugerencia(sugerenciaCursor)) 
+/* aca hay que cambiar por usuarioDAO*/if (usuario.aceptarSugerencia( sugerenciaCursor)) 
 							mensaje = "##################################################################################\n"
 									 + "##                         ¡Compra realizada con exito!                        ##\n"
 									 + "##################################################################################";
