@@ -125,6 +125,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			switch (tipoAtracciones) {
 			case 1:{
 				tipoAtraccion = TipoAtraccion.AVENTURA;
+// borrar estas salidas por pantalla - son para probar
 				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
 				System.out.println("Id "+ resultados.getInt(1));
 				System.out.println("DNI "+ resultados.getInt(2));
