@@ -118,7 +118,37 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 	private Usuario toUsuario(ResultSet resultados) {
 		try {
-			TipoAtraccion tipoAtraccion = TipoAtraccion.valueOf(resultados.getString(1));
+			
+			int tipoAtracciones = resultados.getInt(5);
+			TipoAtraccion tipoAtraccion = null;
+	
+			switch (tipoAtracciones) {
+			case 1:{
+				tipoAtraccion = TipoAtraccion.AVENTURA;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("DNI "+ resultados.getInt(2));
+				System.out.println("Presupuesto "+ resultados.getDouble(3));
+				System.out.println("Tiempo Dispobible "+ resultados.getDouble(4));
+				System.out.println("Usuario nombre "+ resultados.getString(3));}
+			case 2:{
+				tipoAtraccion = TipoAtraccion.DEGUSTACION;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("DNI "+ resultados.getInt(2));
+				System.out.println("Usuario nombre "+ resultados.getString(3));
+				System.out.println("Presupuesto "+ resultados.getDouble(4));
+				System.out.println("Tiempo Dispobible "+ resultados.getDouble(5));}
+			case 3:{
+				tipoAtraccion = TipoAtraccion.PAISAJE;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("DNI "+ resultados.getInt(2));
+				System.out.println("Usuario nombre "+ resultados.getString(3));
+				System.out.println("Presupuesto "+ resultados.getDouble(4));
+				System.out.println("Tiempo Dispobible "+ resultados.getDouble(5));
+				}
+			}
 			// parametros: dni, Nombre, Presupuesto, tiempoDisponible, tipo de atraccion
 			return new Usuario(resultados.getInt(2), resultados.getString(3), resultados.getDouble(4),
 					resultados.getDouble(5), tipoAtraccion);
@@ -126,6 +156,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			throw new MissingDataException(e);
 		}
 	}
+	
+	
 
 	@Override
 	public int update(Usuario t) {
@@ -139,4 +171,5 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		return null;
 	}
 
+	
 }

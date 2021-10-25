@@ -22,6 +22,7 @@ public class SecretariaTurismo {
 		UsuarioDAO usuarioDAO = DAOFactory.getUsuarioDAO();
 		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionesDAO();
 		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
+	//	System.out.println(usuarios.get(1));
 		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
 	//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();

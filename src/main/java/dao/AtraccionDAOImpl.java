@@ -31,11 +31,41 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 			}
 	}
 
-	private Atraccion toAtraccion(ResultSet resultado) {
+	private Atraccion toAtraccion(ResultSet resultados) {
 		try {
-			TipoAtraccion tipo = TipoAtraccion.valueOf(resultado.getString(1));
-			return new Atraccion( tipo, resultado.getString(2), resultado.getDouble(3), resultado.getDouble(4),
-					resultado.getInt(5));
+			int tipoAtracciones = resultados.getInt(2);
+			TipoAtraccion tipoAtraccion = null;
+	
+			switch (tipoAtracciones) {
+			case 1:{
+				tipoAtraccion = TipoAtraccion.AVENTURA;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("Nombre Atraccion "+ resultados.getString(3));
+				System.out.println("Costo "+ resultados.getDouble(4));
+				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
+				System.out.println("Cupo "+ resultados.getInt(7));}
+			case 2:{
+				tipoAtraccion = TipoAtraccion.DEGUSTACION;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("Nombre Atraccion "+ resultados.getString(3));
+				System.out.println("Costo "+ resultados.getDouble(4));
+				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
+				System.out.println("Cupo "+ resultados.getInt(7));}
+			case 3:{
+				tipoAtraccion = TipoAtraccion.PAISAJE;
+				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
+				System.out.println("Id "+ resultados.getInt(1));
+				System.out.println("Nombre Atraccion "+ resultados.getString(3));
+				System.out.println("Costo "+ resultados.getDouble(4));
+				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
+				System.out.println("Cupo "+ resultados.getInt(7));
+				}
+			}
+			
+			return new Atraccion( tipoAtraccion, resultados.getString(2), resultados.getDouble(3), resultados.getDouble(4),
+					resultados.getInt(5));
 			}catch (Exception e) {
 				throw new MissingDataException(e);
 			}

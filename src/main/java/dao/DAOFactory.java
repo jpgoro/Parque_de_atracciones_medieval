@@ -8,6 +8,9 @@ public class DAOFactory {
 	
 	public static AtraccionDAO getAtraccionesDAO() {
 		return new AtraccionDAOImpl();
-
+	}
+	
+	public static PromocionDAO getPromodionesDAO() {
+		return new PromocionDAOImpl();
 	}
 }
