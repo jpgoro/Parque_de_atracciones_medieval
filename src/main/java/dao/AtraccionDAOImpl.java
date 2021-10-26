@@ -15,6 +15,7 @@ import model.Usuario;
 
 public class AtraccionDAOImpl implements AtraccionDAO {
 
+	
 	@Override
 	public List<Atraccion> findAll() {
 		try {
@@ -31,11 +32,13 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 			}catch (Exception e) {
 				throw new MissingDataException(e);
 			}
+		
 	}
 
 	private Atraccion toAtraccion(ResultSet resultados) {
 		try {
 			int tipoAtracciones = resultados.getInt(2);
+			Atraccion aux= null;
 			TipoAtraccion tipoAtraccion = null;
 	
 			switch (tipoAtracciones) {
@@ -46,7 +49,7 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 				System.out.println("Nombre Atraccion "+ resultados.getString(3));
 				System.out.println("Costo "+ resultados.getDouble(4));
 				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
-				System.out.println("Cupo "+ resultados.getInt(7));}
+				System.out.println("Cupo Atraccion: "+ resultados.getInt(7));}
 			case 2:{
 				tipoAtraccion = TipoAtraccion.DEGUSTACION;
 				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
@@ -54,7 +57,7 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 				System.out.println("Nombre Atraccion "+ resultados.getString(3));
 				System.out.println("Costo "+ resultados.getDouble(4));
 				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
-				System.out.println("Cupo "+ resultados.getInt(7));}
+				System.out.println("Cupo Atraccion: "+ resultados.getInt(7));}
 			case 3:{
 				tipoAtraccion = TipoAtraccion.PAISAJE;
 				System.out.println("tipo de atraccion es:::::"+tipoAtraccion);
@@ -62,12 +65,15 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 				System.out.println("Nombre Atraccion "+ resultados.getString(3));
 				System.out.println("Costo "+ resultados.getDouble(4));
 				System.out.println("Tiempo Requerido "+ resultados.getDouble(5));
-				System.out.println("Cupo "+ resultados.getInt(7));
+				System.out.println("Cupo Atraccion:"+ resultados.getInt(7));
 				}
 			}
+			aux = new Atraccion( tipoAtraccion, resultados.getString(3), resultados.getDouble(4), resultados.getDouble(5),
+								resultados.getInt(7));
 			
-			return new Atraccion( tipoAtraccion, resultados.getString(2), resultados.getDouble(3), resultados.getDouble(4),
-					resultados.getInt(5));
+			return aux;
+	//		return new Atraccion( tipoAtraccion, resultados.getString(3), resultados.getDouble(4), resultados.getDouble(5),
+	//				resultados.getInt(7));
 			}catch (Exception e) {
 				throw new MissingDataException(e);
 			}

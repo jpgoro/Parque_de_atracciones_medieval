@@ -8,7 +8,15 @@ public class Itinerario {
 	List <Sugerencia> listadoSugerenciasAceptadas = new LinkedList<Sugerencia>();
 
 	public boolean aceptarSugerencia(Sugerencia nueva) {
-		return listadoSugerenciasAceptadas.add(nueva); // devuelve true si se agregó
+		boolean agregada = false;
+		try {
+			nueva.ocuparLugar();
+			listadoSugerenciasAceptadas.add(nueva);
+			agregada = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return agregada; 
 	}
 
 	public List<Sugerencia> getListadoSugerenciasAceptadas() {

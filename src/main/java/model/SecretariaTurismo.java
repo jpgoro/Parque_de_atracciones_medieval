@@ -25,7 +25,9 @@ public class SecretariaTurismo {
 		PromocionDAO promocionDAO = DAOFactory.getPromocionesDAO();
 		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
 		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
+		
 		promociones= promocionDAO.findAll();
+		
 	//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();
 	//	promociones = AdministradorArchivos.leerPromociones();

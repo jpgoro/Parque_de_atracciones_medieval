@@ -40,6 +40,26 @@ public abstract class Promocion extends Sugerencia {
 		super.setTiempoRequerido(suma);
 	}
 	
+	@Override
+	public void ocuparLugar() throws Exception {
+		for(Atraccion atraccion : atraccionesContenidas) {
+			atraccion.ocuparLugar();
+		}
+	}
+	
+	@Override
+	public boolean hayCupo() {
+		boolean hayCupo = true;
+		int i = 0;
+		
+		while(hayCupo && i < this.atraccionesContenidas.size()) {
+			hayCupo = atraccionesContenidas.get(i).hayCupo();
+			i++;
+		}
+		
+		return hayCupo;
+	}
+	
 	public double getMontoDescuento() {
 		return montoDescuento;
 	}

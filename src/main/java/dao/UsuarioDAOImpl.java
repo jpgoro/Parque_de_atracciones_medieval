@@ -49,7 +49,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 	public int updatePresupuestoYTiempoDisponible(Usuario usuario) {
 		try {
-			String sql = "UPDATE USUARIOS SET tiempo_dispobile = ?, presupuesto = ? WHERE dni = ? ";
+			String sql = "UPDATE USUARIOS SET tiempo_disponible = ?, presupuesto = ? WHERE dni = ? ";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setDouble(1, usuario.getTiempoDisponible());
@@ -147,10 +147,32 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			usuario.setPresupuesto(usuario.getPresupuesto()-nueva.getCosto());
 			usuario.setTiempoDisponible(usuario.getTiempoDisponible()-nueva.getTiempoRequerido());
 			this.updatePresupuestoYTiempoDisponible(usuario);
+	//		this.agregarAlItinerario(usuario, nueva);
+			//hacer metodo para disminuir el cupo de la atraccin
+			agregada = true;
+			
 	//		agregada = itinerarioPersonal.aceptarSugerencia(nueva);// hay que hacer este metodo para la tabla itinerario
 		}		
 		return agregada;
 	}
+
+/*	private void agregarAlItinerario(Usuario usuario, Sugerencia nueva) {
+		try {
+			String sql = "UPDATE ATRACCIONES SET CUPO = ? WHERE ID = ? ";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setDouble(1, nueva.g);
+			statement.setDouble(2, usuario.getPresupuesto());
+			statement.setInt(3, usuario.getDni());
+
+			int rows = statement.executeUpdate();
+
+			return rows;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+		
+	}*/
 
 	private boolean puedoAceptar(Usuario usuario, Sugerencia sugerencia) {
 		Usuario unUsuario = null;

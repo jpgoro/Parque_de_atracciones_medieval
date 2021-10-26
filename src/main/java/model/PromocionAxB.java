@@ -56,5 +56,17 @@ public class PromocionAxB extends Promocion {
 
 		return mensaje;
 	}
+
+	@Override
+	public void ocuparLugar() throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean hayCupo() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

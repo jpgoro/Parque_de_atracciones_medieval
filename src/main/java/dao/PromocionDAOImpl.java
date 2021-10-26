@@ -59,16 +59,16 @@ public class PromocionDAOImpl implements PromocionDAO {
 			case 1: {// Absuluta
 				double dtoTotal = resultados.getDouble(5);
 				promo= new PromocionAbsoluta(tipoAtraccion, resultados.getString(3),
-						traerLasAtracciones(resultados.getInt(2)), dtoTotal);
+						traerLasAtracciones(resultados.getInt(1)), dtoTotal);// 1 es el id de la promo
 			}
 			case 2: {// AxB
 				promo = new PromocionAxB(tipoAtraccion, resultados.getString(3),
-						traerLasAtracciones(resultados.getInt(2)), traerLasAtraccionesGratis(resultados.getInt(1)));
+						traerLasAtracciones(resultados.getInt(1)), traerLasAtraccionesGratis(resultados.getInt(1)));
 			}
 			case 3: {// Porcentual
 				double porcentajeDto = resultados.getDouble(5);
 				promo = new PromocionPorcentual(tipoAtraccion, resultados.getString(3),
-						traerLasAtracciones(resultados.getInt(2)), porcentajeDto);
+						traerLasAtracciones(resultados.getInt(1)), porcentajeDto);
 			}
 			}
 		} catch (Exception e) {
@@ -77,21 +77,20 @@ public class PromocionDAOImpl implements PromocionDAO {
 		return promo;
 	}
 
-	private List<Atraccion> traerLasAtraccionesGratis(int idPromocion) {
+	private List<Atraccion> traerLasAtraccionesGratis(int idPromo) {
 		try {
 			String sql = "select Atracciones.id, Atracciones.id_tipo, Atracciones.nombre, Atracciones.costo, Atracciones.tiempo, Atracciones.promocion, Atracciones.cupo\r\n"
 					+ "from Promociones\r\n"
 					+ "inner JOIN atracciones_gratis_en_promo on atracciones_gratis_en_promo.id_promocion = Promociones.id\r\n"
 					+ "inner JOIN Atracciones on Atracciones.id = atracciones_gratis_en_promo.id_atraccion\r\n"
-					+ "where Promociones.tipo_promocion = ?\r\n" + "";
+					+ "where Promociones.id = 2\r\n" + "";// tipo promocion 2 son las AxB
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, idPromocion);
+			//statement.setInt(1, idPromo);
 			ResultSet resultado = statement.executeQuery();
-
 			LinkedList<Atraccion> atracciones = new LinkedList<Atraccion>();
 			while (resultado.next()) {
-				atracciones.add(toAtraccion(resultado));
+				atracciones.add(this.toAtraccion(resultado));
 			}
 			return atracciones;
 		} catch (Exception e) {
@@ -99,21 +98,21 @@ public class PromocionDAOImpl implements PromocionDAO {
 		}
 	}
 
-	private List<Atraccion> traerLasAtracciones(int idTipoPromo) {
+	private List<Atraccion> traerLasAtracciones(int idPromo) {
 		try {
 			String sql = "select Atracciones.id, Atracciones.id_tipo, Atracciones.nombre, Atracciones.costo, Atracciones.tiempo, Atracciones.promocion, Atracciones.cupo\r\n"
 					+ "from Promociones\r\n"
 					+ "inner JOIN atracciones_en_promo on atracciones_en_promo.id_promocion = Promociones.id\r\n"
 					+ "inner JOIN Atracciones on Atracciones.id = atracciones_en_promo.id_atraccion\r\n"
-					+ "where Promociones.tipo_promocion = ?\r\n" + "";
+					+ "where Promociones.id = ?\r\n" + "";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, idTipoPromo);
+			statement.setInt(1, idPromo);
 			ResultSet resultado = statement.executeQuery();
 
 			LinkedList<Atraccion> atracciones = new LinkedList<Atraccion>();
 			while (resultado.next()) {
-				atracciones.add(toAtraccion(resultado));
+				atracciones.add(this.toAtraccion(resultado));
 			}
 			return atracciones;
 		} catch (Exception e) {
@@ -134,9 +133,9 @@ public class PromocionDAOImpl implements PromocionDAO {
 			case 3:
 				tipoAtraccion = TipoAtraccion.PAISAJE;
 			}
-
 			return new Atraccion(tipoAtraccion, resultados.getString(3), resultados.getDouble(4),
-					resultados.getDouble(5), resultados.getInt(6));
+					resultados.getDouble(5), resultados.getInt(7));
+			
 		} catch (Exception e) {
 			throw new MissingDataException(e);
 		}
