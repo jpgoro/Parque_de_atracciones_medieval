@@ -8,7 +8,9 @@ import java.util.List;
 
 import jdbc.ConnectionProvider;
 import model.Atraccion;
+import model.Sugerencia;
 import model.TipoAtraccion;
+import model.Usuario;
 
 
 public class AtraccionDAOImpl implements AtraccionDAO {
@@ -110,6 +112,12 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	public Atraccion findByNombre(String nombre) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean aceptarSugerencia(Usuario usuario, Sugerencia nueva) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

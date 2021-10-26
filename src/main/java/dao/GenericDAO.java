@@ -3,6 +3,9 @@ package dao;
 
 import java.util.List;
 
+import model.Sugerencia;
+import model.Usuario;
+
 public interface GenericDAO<T> {
 
 	public List<T> findAll(); 
@@ -10,4 +13,5 @@ public interface GenericDAO<T> {
 	public int insert(T t); 
 	public int update(T t); 
 	public int delete(T t);
+	public boolean aceptarSugerencia(Usuario usuario, Sugerencia nueva);
 }

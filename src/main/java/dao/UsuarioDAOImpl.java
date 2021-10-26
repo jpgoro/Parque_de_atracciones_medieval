@@ -146,7 +146,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		if(puedoAceptar(usuario, nueva)) {			
 			usuario.setPresupuesto(usuario.getPresupuesto()-nueva.getCosto());
 			usuario.setTiempoDisponible(usuario.getTiempoDisponible()-nueva.getTiempoRequerido());
-			this.update(usuario);
+			this.updatePresupuestoYTiempoDisponible(usuario);
 	//		agregada = itinerarioPersonal.aceptarSugerencia(nueva);// hay que hacer este metodo para la tabla itinerario
 		}		
 		return agregada;
@@ -162,7 +162,8 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		
 	@Override
 	public int update(Usuario usuario) {
-		try {
+		return 0;
+/*		try {
 			String sql = "UPDATE USUARIOS SET (PRESUPUESTO,TIEMPO_DISPONIBLE) = (?,?) WHERE DNI = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
@@ -175,7 +176,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			return rows;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
-		}
+		}*/
 	}
 
 	@Override
