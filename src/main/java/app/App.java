@@ -1,4 +1,4 @@
-package model;
+package app;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -11,8 +11,14 @@ import dao.AtraccionDAO;
 import dao.DAOFactory;
 import dao.PromocionDAO;
 import dao.UsuarioDAO;
+import model.AdministradorArchivos;
+import model.Atraccion;
+import model.ComparadorDeSugerencias;
+import model.Promocion;
+import model.Sugerencia;
+import model.Usuario;
 
-public class SecretariaTurismo {
+public class App {
 	private static List<Usuario>    usuarios 	= new LinkedList<Usuario>();
 	private static List<Atraccion>  atracciones = new LinkedList<Atraccion>(); 
 	private static List<Promocion>  promociones = new LinkedList<Promocion>();

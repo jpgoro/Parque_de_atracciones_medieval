@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import app.App;
 import dao.UsuarioDAO;
 
 public class AdministradorArchivos {
@@ -125,7 +126,7 @@ public class AdministradorArchivos {
 					TipoAtraccion tipo 		   	   = TipoAtraccion.valueOf(datos[2]);
 					String[] atraccionesContenidas = datos[3].split("-"); 
 					
-					List<Atraccion> atraccionesPromo = SecretariaTurismo.traerAtracciones(atraccionesContenidas);
+					List<Atraccion> atraccionesPromo = App.traerAtracciones(atraccionesContenidas);
 
 					switch(tipoPromo) {
 						case "Absoluta":
@@ -138,7 +139,7 @@ public class AdministradorArchivos {
 							
 						case "AxB":
 							String[] atraccionesGratis = datos[4].split("-");
-							List<Atraccion> atraccionesGratisAxB = SecretariaTurismo.traerAtracciones(atraccionesGratis);
+							List<Atraccion> atraccionesGratisAxB = App.traerAtracciones(atraccionesGratis);
 							atraccionesPromo.addAll(atraccionesGratisAxB); //agrego tambien las atracciones gratis a la lista de promos contenidas
 							promociones.add(new PromocionAxB(tipo,
 											nombrePromo,
