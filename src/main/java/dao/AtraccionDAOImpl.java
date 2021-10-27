@@ -118,9 +118,21 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	}
 
 	@Override
-	public int update(Atraccion t) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int update(Atraccion atraccion) {
+		try {
+			String sql = "UPDATE Atracciones SET costo = ? WHERE nombre = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setDouble(1, atraccion.getCosto());
+			statement.setString(2, atraccion.getNombre());
+			
+			int rows = statement.executeUpdate();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	@Override
