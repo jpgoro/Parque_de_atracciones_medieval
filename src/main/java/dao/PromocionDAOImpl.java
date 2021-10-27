@@ -141,32 +141,82 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 	@Override
 	public int countAll() {
+		try {
+			String sql = "SELECT COUNT(1) AS TOTAL FROM promociones";
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			ResultSet resultado = statement.executeQuery();
+
+			resultado.next();
+			int total = resultado.getInt("TOTAL");
+
+			return total;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+
+	@Override
+	public int insert(Promocion promocion) {
+//		try {
+//			String sql = "INSERT INTO promociones(tipo_promocion, nombre_promo, id_tipo_atraccion, descuento) VALUES(?,?,?,?)";
+//			Connection conn = ConnectionProvider.getConnection();
+//
+//			PreparedStatement statement = conn.prepareStatement(sql);
+//			
+//			// Esta es una forma de hacerlo. Otra seria crear tablas en la base de datos para cada tipo de promo
+//			if(promocion instanceof PromocionAbsoluta) {
+//				statement.setInt(1, 1);
+//			} else if (promocion instanceof PromocionAxB) {
+//				statement.setInt(1, 2);
+//			} else if (promocion instanceof PromocionPorcentual) {
+//				statement.setInt(1, 3);
+//			}
+//			
+//			statement.setString(2, promocion.getNombre());
+//			statement.setDouble(3, promocion.getIdTipo());
+//			statement.setDouble(4, promocion.getMontoDescuento());
+//
+//			int rows = statement.executeUpdate();
+//
+//			return rows; // devuelve las filas que cambiaron
+//		} catch (Exception e) {
+//			throw new MissingDataException(e);
+//		}
+	}
+
+	@Override
+	public int update(Promocion promocion) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int insert(Promocion t) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int update(Promocion t) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int delete(Promocion t) {
+	public int delete(Promocion promocion) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public Promocion findByNombre(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			String sql = "SELECT * FROM promociones WHERE nombre_promo = ?";
+			
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, nombre);
+			ResultSet resultados = statement.executeQuery();	
+			
+			Promocion promocion = null;
+
+			if (resultados.next()) {
+				promocion = toPromocion(resultados);
+			}
+
+			return promocion;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 }

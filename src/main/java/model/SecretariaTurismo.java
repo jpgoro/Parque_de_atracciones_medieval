@@ -28,8 +28,8 @@ public class SecretariaTurismo {
 		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
 		
 		promociones= promocionDAO.findAll();
-		
-	//	usuarios    = AdministradorArchivos.leerUsuarios();
+
+		//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();
 	//	promociones = AdministradorArchivos.leerPromociones();
 

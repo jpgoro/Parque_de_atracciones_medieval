@@ -137,8 +137,6 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 			statement.setString(1, nombre);
 			ResultSet resultados = statement.executeQuery();
 
-			
-			
 			Atraccion atraccion = null;
 
 			if (resultados.next()) {
