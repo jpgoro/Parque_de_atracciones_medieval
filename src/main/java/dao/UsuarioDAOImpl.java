@@ -16,7 +16,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public int insert(Usuario usuario) {
 		try {
-			String sql = "INSERT INTO Usuarios(dni, nombre, presupuesto, tiempo_disponible,id_Atraccion_preferida) VALUES('?,?,?,?,?')";
+			String sql = "INSERT INTO Usuarios(dni, nombre, presupuesto, tiempo_disponible,id_Atraccion_preferida) VALUES(?,?,?,?,?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);

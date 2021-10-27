@@ -12,9 +12,7 @@ import model.Promocion;
 import model.PromocionAbsoluta;
 import model.PromocionAxB;
 import model.PromocionPorcentual;
-import model.Sugerencia;
 import model.TipoAtraccion;
-import model.Usuario;
 
 
 public class PromocionDAOImpl implements PromocionDAO {
@@ -169,12 +167,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 	public Promocion findByNombre(String nombre) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean aceptarSugerencia(Usuario usuario, Sugerencia nueva) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

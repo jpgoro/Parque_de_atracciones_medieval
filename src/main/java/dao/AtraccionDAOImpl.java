@@ -8,9 +8,7 @@ import java.util.List;
 
 import jdbc.ConnectionProvider;
 import model.Atraccion;
-import model.Sugerencia;
 import model.TipoAtraccion;
-import model.Usuario;
 
 
 public class AtraccionDAOImpl implements AtraccionDAO {
@@ -99,10 +97,11 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	@Override
 	public int insert(Atraccion atraccion) {
 		try {
-			String sql = "INSERT INTO Atracciones(id_tipo, nombre, costo, tiempo, promocion, cupo) VALUES('?,?,?,?,?,?')";
+			String sql = "INSERT INTO Atracciones(id_tipo, nombre, costo, tiempo, promocion, cupo) VALUES(?,?,?,?,?,?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
+			
 			statement.setInt(1, atraccion.getIdTipo());
 			statement.setString(2, atraccion.getNombre());
 			statement.setDouble(3, atraccion.getCosto());
@@ -134,12 +133,6 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	public Atraccion findByNombre(String nombre) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public boolean aceptarSugerencia(Usuario usuario, Sugerencia nueva) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
