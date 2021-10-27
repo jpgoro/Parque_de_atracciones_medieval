@@ -97,9 +97,25 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	}
 
 	@Override
-	public int insert(Atraccion t) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int insert(Atraccion atraccion) {
+		try {
+			String sql = "INSERT INTO Atracciones(id_tipo, nombre, costo, tiempo, promocion, cupo) VALUES('?,?,?,?,?,?')";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setInt(1, atraccion.getIdTipo());
+			statement.setString(2, atraccion.getNombre());
+			statement.setDouble(3, atraccion.getCosto());
+			statement.setDouble(4, atraccion.getTiempoRequerido());
+			statement.setBoolean(5, atraccion.esPromocion());
+			statement.setInt(6, atraccion.getCupoActual());
+
+			int rows = statement.executeUpdate();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	@Override

@@ -34,6 +34,19 @@ public abstract class Sugerencia {
 	public abstract boolean hayCupo();
 	
 	
+	public int getIdTipo() {
+		switch(this.getTipo()) {
+		case AVENTURA:
+			return 1;
+		case DEGUSTACION:
+			return 2;
+		case PAISAJE:
+			return 3;
+		default:
+			return -1;
+		}
+	}
+	
 	public TipoAtraccion getTipo() {
 		return tipo;
 	}
