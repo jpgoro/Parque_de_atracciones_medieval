@@ -24,7 +24,7 @@ public class ComparadorDeSugerencias implements Comparator<Sugerencia> {
 			return 1;
 		}
 		if (o1.esPromocion() && !o2.esPromocion()) {
-			return 1;
+			return -1;
 		}
 
 		// Prioridad por dinero

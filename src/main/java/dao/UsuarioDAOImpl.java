@@ -16,7 +16,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	@Override
 	public int insert(Usuario usuario) {
 		try {
-			String sql = "INSERT INTO Usuarios(dni, nombre, presupuesto, tiempo_disponible,id_Atraccion_preferida) VALUES(?,?,?,?,?)";
+			String sql = "INSERT INTO usuarios(dni, nombre, presupuesto, tiempo_disponible,id_Atraccion_preferida) VALUES(?,?,?,?,?)";
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
@@ -49,7 +49,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 	public int updatePresupuestoYTiempoDisponible(Usuario usuario) {
 		try {
-			String sql = "UPDATE USUARIOS SET tiempo_disponible = ?, presupuesto = ? WHERE dni = ? ";
+			String sql = "UPDATE usuarios SET tiempo_disponible = ?, presupuesto = ? WHERE dni = ? ";
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			statement.setDouble(1, usuario.getTiempoDisponible());

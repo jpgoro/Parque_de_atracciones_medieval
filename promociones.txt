@@ -1,3 +1,0 @@
-Absoluta;Pack Degustacion;DEGUSTACION;Lothlorien-La Comarca;36
-AxB;Pack Paisaje;PAISAJE;Minas Tirith-Erebor;Abismo de Helm
-Porcentual;Pack Aventura;AVENTURA;Bosque Negro-Mordor;20

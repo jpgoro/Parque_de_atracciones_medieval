@@ -36,17 +36,4 @@ public class PromocionPorcentual extends Promocion {
 		mensaje += "\n\tTiempo Requerido (min): " + super.tiempoRequerido + "\n";
 		return mensaje;
 	}
-
-	@Override
-	public void ocuparLugar() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean hayCupo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }

@@ -124,28 +124,33 @@ public class AdministradorArchivos {
 					String nombrePromo			   = datos[1];
 					TipoAtraccion tipo 		   	   = TipoAtraccion.valueOf(datos[2]);
 					String[] atraccionesContenidas = datos[3].split("-"); 
+					
+					List<Atraccion> atraccionesPromo = SecretariaTurismo.traerAtracciones(atraccionesContenidas);
+
 					switch(tipoPromo) {
 						case "Absoluta":
 							double dtoTotal = Double.parseDouble(datos[datos.length - 1]);
 							promociones.add(new PromocionAbsoluta(tipo,
 											nombrePromo,
-											SecretariaTurismo.traerAtracciones(atraccionesContenidas), 
+											atraccionesPromo, 
 											dtoTotal));
 							break;
 							
 						case "AxB":
 							String[] atraccionesGratis = datos[4].split("-");
+							List<Atraccion> atraccionesGratisAxB = SecretariaTurismo.traerAtracciones(atraccionesGratis);
+							atraccionesPromo.addAll(atraccionesGratisAxB); //agrego tambien las atracciones gratis a la lista de promos contenidas
 							promociones.add(new PromocionAxB(tipo,
 											nombrePromo,
-											SecretariaTurismo.traerAtracciones(atraccionesContenidas),
-											SecretariaTurismo.traerAtracciones(atraccionesGratis)));
+											atraccionesPromo,
+											atraccionesGratisAxB));
 							break;
 							
 						case "Porcentual":
 							double porcentajeDto = Double.parseDouble(datos[datos.length - 1]);
 							promociones.add(new PromocionPorcentual(tipo,
 											nombrePromo,
-											SecretariaTurismo.traerAtracciones(atraccionesContenidas),
+											atraccionesPromo,
 											porcentajeDto));
 							break;
 					}

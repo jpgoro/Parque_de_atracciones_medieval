@@ -1,7 +1,6 @@
 package model;
 
 import java.util.List;
-import java.util.Objects;
 
 public class PromocionAbsoluta extends Promocion{
 
@@ -36,18 +35,4 @@ public class PromocionAbsoluta extends Promocion{
 
 		return mensaje;
 	}
-
-	@Override
-	public void ocuparLugar() throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean hayCupo() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	
 }

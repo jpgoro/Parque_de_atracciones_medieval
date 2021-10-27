@@ -17,18 +17,20 @@ public abstract class Promocion extends Sugerencia {
 		super(tipoDePromocion, nombrePromocion, true);
 		this.atraccionesContenidas = atraccionesContenidas;
 		calcularTiempoRequeridoPromocion();
-		calulcarCostoTotalSinPromo();
-		}
+		this.montoTotalSinDto = calulcarCostoTotalSinPromo();
+	}
 	
 
 	public abstract void calcularCostoPromocion();
 
-	protected void calulcarCostoTotalSinPromo() {
+	protected double calulcarCostoTotalSinPromo() {
 		// Obtiene el costo de todas las atracciones contenidas dentro del pack sin
 		// aplicar promo
-		for (Atraccion atraccion : atraccionesContenidas) {
-			montoTotalSinDto += atraccion.getCosto();
+		double costoSinDto = 0;
+		for (Atraccion atraccion : this.atraccionesContenidas) {
+			costoSinDto  += atraccion.getCosto();
 		}
+		return costoSinDto;
 	}
 	
 	private void calcularTiempoRequeridoPromocion() {
@@ -77,6 +79,9 @@ public abstract class Promocion extends Sugerencia {
 		super.setCosto(montoTotalConDto);
 	}
 
+	public double getMontoTotalSinDto() {
+		return montoTotalSinDto;
+	}
 
 	@Override
 	public int hashCode() {

@@ -11,9 +11,6 @@ public abstract class Sugerencia {
 	protected boolean promocion;
 	protected int cupoActual = 0;
 	
-	public int getCupoActual() {
-		return cupoActual;
-	}
 
 	public Sugerencia(TipoAtraccion tipo, String nombre, Double costo, 
 			Double tiempoRequerido, boolean promocion) {
@@ -75,6 +72,11 @@ public abstract class Sugerencia {
 		this.costo = costo;
 	}
 
+	public int getCupoActual() {
+		return cupoActual;
+	}
+
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(costo, nombre, promocion, tiempoRequerido, tipo);
@@ -95,6 +97,4 @@ public abstract class Sugerencia {
 				&& tipo == other.tipo;
 	}
 	
-
-
 }
