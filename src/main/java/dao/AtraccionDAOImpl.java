@@ -113,7 +113,7 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	@Override
 	public int delete(Atraccion atraccion) {
 		try {
-			String sql = "DELETRE FROM atracciones WHERE nombre = ?";
+			String sql = "DELETE FROM atracciones WHERE nombre = ?";
 			Connection conn = ConnectionProvider.getConnection();
 			
 			PreparedStatement statement = conn.prepareStatement(sql);
