@@ -124,9 +124,20 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 	}
 
 	@Override
-	public int delete(Atraccion t) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int delete(Atraccion atraccion) {
+		try {
+			String sql = "DELETRE FROM Atracciones WHERE nombre = ?";
+			Connection conn = ConnectionProvider.getConnection();
+			
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, atraccion.getNombre());
+			
+			int rows = statement.executeUpdate();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	@Override
