@@ -83,6 +83,11 @@ public abstract class Promocion extends Sugerencia {
 		return montoTotalSinDto;
 	}
 
+	public List<Atraccion> getAtraccionesContenidas() {
+		return atraccionesContenidas;
+	}
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
