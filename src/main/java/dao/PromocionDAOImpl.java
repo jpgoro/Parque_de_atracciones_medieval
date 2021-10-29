@@ -14,7 +14,6 @@ import model.PromocionAxB;
 import model.PromocionPorcentual;
 import model.TipoAtraccion;
 
-
 public class PromocionDAOImpl implements PromocionDAO {
 
 	@Override
@@ -179,10 +178,38 @@ public class PromocionDAOImpl implements PromocionDAO {
 //
 //			int rows = statement.executeUpdate();
 //
+//			// Obtengo el ID para hacer la asociacion
+//			String sqlConsultaIdPromo = "SELECT id FROM promociones WHERE nombre_promo = ?";
+//			PreparedStatement statementIdPromo = conn.prepareStatement(sqlConsultaIdPromo);
+//			statementIdPromo.setString(1, promocion.getNombre());
+//			
+//			ResultSet resultadoConsultaIdPromo = statementIdPromo.executeQuery();	
+//			resultadoConsultaIdPromo.next();
+//			int idPromo = resultadoConsultaIdPromo.getInt("id");
+//			
+//			// Para cada atraccion contenida en la promo consulto su id
+//			for(Atraccion atraccion : promocion.getAtraccionesContenidas()) {
+//				String sqlConsultaIdAtraccion = "SELECT id FROM atracciones WHERE nombre = ?";
+//				PreparedStatement statementIdAtraccion = conn.prepareStatement(sqlConsultaIdAtraccion);
+//				statementIdPromo.setString(1, atraccion.getNombre());
+//
+//				ResultSet resultadoConsultaIdAtraccion = statementIdAtraccion.executeQuery();	
+//				resultadoConsultaIdAtraccion.next();
+//				
+//				int idAtraccion = resultadoConsultaIdAtraccion.getInt("id");
+//				
+//				String sqlInsertar = "INSERT INTO atracciones_en_promo(id_promocion, id_atraccion) VALUES (" + idPromo + ", "+ idAtraccion + ")";
+//				PreparedStatement statementInsertar = conn.prepareStatement(sqlInsertar);
+//				statementInsertar.executeUpdate();
+//
+//			}
+//			
+//			
 //			return rows; // devuelve las filas que cambiaron
 //		} catch (Exception e) {
 //			throw new MissingDataException(e);
 //		}
+		
 	}
 
 	@Override
@@ -193,8 +220,43 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 	@Override
 	public int delete(Promocion promocion) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		/**
+		 * NO SE SI ESTO ESTÁ BIEN !!!!!!!!!
+		 */
+		
+		try {
+			// Primero me guardo el ID de la promo a borrar
+			String sql = "SELECT id FROM promociones WHERE nombre_promo = ?";
+			
+			// Establezco la conexión 
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, promocion.getNombre());
+			
+			// Obtengo el resultado de la consulta
+			ResultSet resultado = statement.executeQuery();	
+			int id = resultado.getInt("id");
+			
+			// Una vez obtenido el ID, ya puedo borrar el registro
+			sql = "DELETE FROM promociones WHERE nombre_promo = ?";
+			statement.setString(1, promocion.getNombre());
+			int rows = statement.executeUpdate();
+
+			// Ahora borro el registro asociado
+			sql = "DELETE FROM atracciones_en_promo WHERE id_promocion = ?";
+			statement.setInt(1, id);
+			rows += statement.executeUpdate();
+			
+			// Ahora borro el registro asociado
+			sql = "DELETE FROM atracciones_gratis_en_promo WHERE id_promocion = ?";
+			statement.setInt(1, id);
+			rows += statement.executeUpdate();
+			
+			return rows; 
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	@Override
