@@ -23,7 +23,9 @@ public class PromocionDAOImpl implements PromocionDAO {
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet resultado = statement.executeQuery();
-
+			
+			conn.close();
+			
 			LinkedList<Promocion> promociones = new LinkedList<Promocion>();
 			while (resultado.next()) {
 				promociones.add(toPromocion(resultado));
@@ -157,61 +159,124 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 	@Override
 	public int insert(Promocion promocion) {
-//		try {
-//			String sql = "INSERT INTO promociones(tipo_promocion, nombre_promo, id_tipo_atraccion, descuento) VALUES(?,?,?,?)";
-//			Connection conn = ConnectionProvider.getConnection();
-//
-//			PreparedStatement statement = conn.prepareStatement(sql);
-//			
-//			// Esta es una forma de hacerlo. Otra seria crear tablas en la base de datos para cada tipo de promo
-//			if(promocion instanceof PromocionAbsoluta) {
-//				statement.setInt(1, 1);
-//			} else if (promocion instanceof PromocionAxB) {
-//				statement.setInt(1, 2);
-//			} else if (promocion instanceof PromocionPorcentual) {
-//				statement.setInt(1, 3);
-//			}
-//			
-//			statement.setString(2, promocion.getNombre());
-//			statement.setDouble(3, promocion.getIdTipo());
-//			statement.setDouble(4, promocion.getMontoDescuento());
-//
-//			int rows = statement.executeUpdate();
-//
-//			// Obtengo el ID para hacer la asociacion
-//			String sqlConsultaIdPromo = "SELECT id FROM promociones WHERE nombre_promo = ?";
-//			PreparedStatement statementIdPromo = conn.prepareStatement(sqlConsultaIdPromo);
-//			statementIdPromo.setString(1, promocion.getNombre());
-//			
-//			ResultSet resultadoConsultaIdPromo = statementIdPromo.executeQuery();	
-//			resultadoConsultaIdPromo.next();
-//			int idPromo = resultadoConsultaIdPromo.getInt("id");
-//			
-//			// Para cada atraccion contenida en la promo consulto su id
-//			for(Atraccion atraccion : promocion.getAtraccionesContenidas()) {
-//				String sqlConsultaIdAtraccion = "SELECT id FROM atracciones WHERE nombre = ?";
-//				PreparedStatement statementIdAtraccion = conn.prepareStatement(sqlConsultaIdAtraccion);
-//				statementIdPromo.setString(1, atraccion.getNombre());
-//
-//				ResultSet resultadoConsultaIdAtraccion = statementIdAtraccion.executeQuery();	
-//				resultadoConsultaIdAtraccion.next();
-//				
-//				int idAtraccion = resultadoConsultaIdAtraccion.getInt("id");
-//				
-//				String sqlInsertar = "INSERT INTO atracciones_en_promo(id_promocion, id_atraccion) VALUES (" + idPromo + ", "+ idAtraccion + ")";
-//				PreparedStatement statementInsertar = conn.prepareStatement(sqlInsertar);
-//				statementInsertar.executeUpdate();
-//
-//			}
-//			
-//			
-//			return rows; // devuelve las filas que cambiaron
-//		} catch (Exception e) {
-//			throw new MissingDataException(e);
-//		}
-		
-	}
+		try {
+			String sql = "INSERT INTO promociones(tipo_promocion, nombre_promo, id_tipo_atraccion, descuento) VALUES(?,?,?,?)";
+			Connection conn = ConnectionProvider.getConnection();
 
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			if(promocion instanceof PromocionAbsoluta) {
+				statement.setInt(1, 1);
+			} else if (promocion instanceof PromocionAxB) {
+				statement.setInt(1, 2);
+			} else if (promocion instanceof PromocionPorcentual) {
+				statement.setInt(1, 3);
+			}
+			
+			statement.setString(2, promocion.getNombre());
+			statement.setDouble(3, promocion.getIdTipo());
+			statement.setDouble(4, promocion.getMontoDescuento());
+
+			int rows = statement.executeUpdate(); // Añado la promocion a la tabla
+			
+			conn.close();
+
+			// Por cada atraccion contenida, la agrego a la tabla
+			for(Atraccion atraccion : promocion.getAtraccionesContenidas()) {
+				rows += insertEnAtraccionesEnPromo(promocion, atraccion);
+			}
+			
+			// Si es una promo AxB significa que tiene atracciones gratis
+			if(promocion instanceof PromocionAxB) {
+				for(Atraccion atraccion : ((PromocionAxB) promocion).getAtraccionesGratis()){
+					rows += insertEnAtraccionesGratisEnPromo(promocion,atraccion);
+				}
+			}
+			
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	private int insertEnAtraccionesEnPromo(Promocion promocion, Atraccion atraccion) {
+		try {
+			String sql = "INSERT INTO atracciones_en_promo(id_promocion, id_atraccion) VALUES (?, ?)";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, obtenerIdPromo(promocion));
+			statement.setInt(2, obtenerIdAtraccion(atraccion));
+
+			int rows = statement.executeUpdate();
+			
+			conn.close();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	private int insertEnAtraccionesGratisEnPromo(Promocion promocion, Atraccion atraccion) {
+		try {
+			String sql = "INSERT INTO atracciones_gratis_en_promo(id_promocion, id_atraccion) VALUES (?, ?)";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, obtenerIdPromo(promocion));
+			statement.setInt(2, obtenerIdAtraccion(atraccion));
+
+			int rows = statement.executeUpdate();
+			
+			conn.close();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	private int deleteEnAtraccionesEnPromo(Promocion promocion) {
+		try {
+			String sql = "DELETE FROM atracciones_en_promo WHERE id_promocion = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, obtenerIdPromo(promocion));
+
+			int rows = statement.executeUpdate();
+			
+			conn.close();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	private int deleteEnAtraccionesGratisEnPromo(Promocion promocion) {
+		try {
+			String sql = "DELETE FROM atracciones_gratis_en_promo WHERE id_promocion = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, obtenerIdPromo(promocion));
+
+			int rows = statement.executeUpdate();
+			
+			conn.close();
+
+			return rows; // devuelve las filas que cambiaron
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
 	@Override
 	public int update(Promocion promocion) {
 		// TODO Auto-generated method stub
@@ -220,39 +285,23 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 	@Override
 	public int delete(Promocion promocion) {
-		
-		/**
-		 * NO SE SI ESTO ESTÁ BIEN !!!!!!!!!
-		 */
-		
 		try {
-			// Primero me guardo el ID de la promo a borrar
-			String sql = "SELECT id FROM promociones WHERE nombre_promo = ?";
-			
-			// Establezco la conexión 
+			String sql = "DELETE FROM promociones WHERE nombre_promo = ?";
 			Connection conn = ConnectionProvider.getConnection();
+			
 			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, promocion.getNombre());
 			
-			// Obtengo el resultado de la consulta
-			ResultSet resultado = statement.executeQuery();	
-			int id = resultado.getInt("id");
-			
-			// Una vez obtenido el ID, ya puedo borrar el registro
-			sql = "DELETE FROM promociones WHERE nombre_promo = ?";
 			statement.setString(1, promocion.getNombre());
 			int rows = statement.executeUpdate();
+			
+			conn.close();
 
-			// Ahora borro el registro asociado
-			sql = "DELETE FROM atracciones_en_promo WHERE id_promocion = ?";
-			statement.setInt(1, id);
-			rows += statement.executeUpdate();
+			rows += deleteEnAtraccionesEnPromo(promocion);
 			
-			// Ahora borro el registro asociado
-			sql = "DELETE FROM atracciones_gratis_en_promo WHERE id_promocion = ?";
-			statement.setInt(1, id);
-			rows += statement.executeUpdate();
-			
+			if(promocion instanceof PromocionAxB) {
+				rows += deleteEnAtraccionesGratisEnPromo(promocion);
+			}
+
 			return rows; 
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -280,5 +329,49 @@ public class PromocionDAOImpl implements PromocionDAO {
 			throw new MissingDataException(e);
 		}
 	}
+	private int obtenerIdPromo(Promocion promocion) {
+		try {
+			String sql = "SELECT id FROM promociones WHERE nombre_promo = ?";
+			Connection conn = ConnectionProvider.getConnection();
 
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, promocion.getNombre());
+
+			ResultSet resultado = statement.executeQuery();	
+			
+			int id = -1;
+			
+			if(resultado.next()) {
+				id = resultado.getInt("id");
+			}
+
+			return id;
+			 
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	private int obtenerIdAtraccion(Atraccion atraccion) {
+		try {
+			String sql = "SELECT id FROM atracciones WHERE nombre = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, atraccion.getNombre());
+
+			ResultSet resultado = statement.executeQuery();	
+			
+			int id = -1;
+			
+			if(resultado.next()) {
+				id = resultado.getInt("id");
+			}
+
+			return id;
+			 
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
 }

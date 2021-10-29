@@ -31,6 +31,10 @@ public class PromocionAxB extends Promocion {
 	}
 	 
 	
+	public List<Atraccion> getAtraccionesGratis() {
+		return atraccionesGratis;
+	}
+
 	@Override
 	public String toString() {
 		String mensaje = ">>> Promocion '" + super.nombre + "'\n";

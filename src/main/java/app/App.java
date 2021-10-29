@@ -15,7 +15,9 @@ import model.AdministradorArchivos;
 import model.Atraccion;
 import model.ComparadorDeSugerencias;
 import model.Promocion;
+import model.PromocionAbsoluta;
 import model.Sugerencia;
+import model.TipoAtraccion;
 import model.Usuario;
 
 public class App {
@@ -35,6 +37,12 @@ public class App {
 		
 		promociones= promocionDAO.findAll();
 
+		
+		List<Atraccion> atraccionesContenidas = new LinkedList<Atraccion>();
+		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "Moria", 999, 999, 999));
+		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "ATRACCION EN PROMO PRUEBA 2", 999, 999, 999));
+		
+		promocionDAO.insert(new PromocionAbsoluta(TipoAtraccion.AVENTURA, "Pack PRUEBA 2", atraccionesContenidas,-1));
 		//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();
 	//	promociones = AdministradorArchivos.leerPromociones();
