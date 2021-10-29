@@ -24,12 +24,12 @@ public class PromocionDAOImpl implements PromocionDAO {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			ResultSet resultado = statement.executeQuery();
 			
-			conn.close();
 			
 			LinkedList<Promocion> promociones = new LinkedList<Promocion>();
 			while (resultado.next()) {
 				promociones.add(toPromocion(resultado));
 			}
+			
 			return promociones;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -179,8 +179,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 			int rows = statement.executeUpdate(); // Añado la promocion a la tabla
 			
-			conn.close();
-
 			// Por cada atraccion contenida, la agrego a la tabla
 			for(Atraccion atraccion : promocion.getAtraccionesContenidas()) {
 				rows += insertEnAtraccionesEnPromo(promocion, atraccion);
@@ -211,8 +209,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 			int rows = statement.executeUpdate();
 			
-			conn.close();
-
 			return rows; // devuelve las filas que cambiaron
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -231,8 +227,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 			int rows = statement.executeUpdate();
 			
-			conn.close();
-
 			return rows; // devuelve las filas que cambiaron
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -250,8 +244,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 			int rows = statement.executeUpdate();
 			
-			conn.close();
-
 			return rows; // devuelve las filas que cambiaron
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -269,8 +261,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 
 			int rows = statement.executeUpdate();
 			
-			conn.close();
-
 			return rows; // devuelve las filas que cambiaron
 		} catch (Exception e) {
 			throw new MissingDataException(e);
@@ -294,8 +284,6 @@ public class PromocionDAOImpl implements PromocionDAO {
 			statement.setString(1, promocion.getNombre());
 			int rows = statement.executeUpdate();
 			
-			conn.close();
-
 			rows += deleteEnAtraccionesEnPromo(promocion);
 			
 			if(promocion instanceof PromocionAxB) {

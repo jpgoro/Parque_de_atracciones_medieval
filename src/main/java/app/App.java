@@ -37,12 +37,16 @@ public class App {
 		
 		promociones= promocionDAO.findAll();
 
-		
+
+		// PARA PROBAR EL PROMOCION DAO:
 		List<Atraccion> atraccionesContenidas = new LinkedList<Atraccion>();
 		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "Moria", 999, 999, 999));
 		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "ATRACCION EN PROMO PRUEBA 2", 999, 999, 999));
 		
 		promocionDAO.insert(new PromocionAbsoluta(TipoAtraccion.AVENTURA, "Pack PRUEBA 2", atraccionesContenidas,-1));
+		
+		
+		
 		//	usuarios    = AdministradorArchivos.leerUsuarios();
 	//	atracciones = AdministradorArchivos.leerAtracciones();
 	//	promociones = AdministradorArchivos.leerPromociones();
