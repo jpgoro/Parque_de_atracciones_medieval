@@ -148,5 +148,28 @@ public class AtraccionDAOImpl implements AtraccionDAO {
 			throw new MissingDataException(e);
 		}
 	}
+	
+	public static int obtenerIdAtraccion(Atraccion atraccion) {
+		try {
+			String sql = "SELECT id FROM atracciones WHERE nombre = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, atraccion.getNombre());
+
+			ResultSet resultado = statement.executeQuery();	
+			
+			int id = -1;
+			
+			if(resultado.next()) {
+				id = resultado.getInt("id");
+			}
+
+			return id;
+			 
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
 
 }

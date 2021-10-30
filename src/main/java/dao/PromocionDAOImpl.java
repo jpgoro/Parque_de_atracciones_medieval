@@ -13,6 +13,7 @@ import model.PromocionAbsoluta;
 import model.PromocionAxB;
 import model.PromocionPorcentual;
 import model.TipoAtraccion;
+import dao.AtraccionDAOImpl;
 
 public class PromocionDAOImpl implements PromocionDAO {
 
@@ -203,9 +204,9 @@ public class PromocionDAOImpl implements PromocionDAO {
 			Connection conn = ConnectionProvider.getConnection();
 
 			PreparedStatement statement = conn.prepareStatement(sql);
-			
+						
 			statement.setInt(1, obtenerIdPromo(promocion));
-			statement.setInt(2, obtenerIdAtraccion(atraccion));
+			statement.setInt(2, AtraccionDAOImpl.obtenerIdAtraccion(atraccion));
 
 			int rows = statement.executeUpdate();
 			
@@ -223,8 +224,8 @@ public class PromocionDAOImpl implements PromocionDAO {
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
 			statement.setInt(1, obtenerIdPromo(promocion));
-			statement.setInt(2, obtenerIdAtraccion(atraccion));
-
+			statement.setInt(2, AtraccionDAOImpl.obtenerIdAtraccion(atraccion));
+			
 			int rows = statement.executeUpdate();
 			
 			return rows; // devuelve las filas que cambiaron
@@ -317,7 +318,7 @@ public class PromocionDAOImpl implements PromocionDAO {
 			throw new MissingDataException(e);
 		}
 	}
-	private int obtenerIdPromo(Promocion promocion) {
+	public static int obtenerIdPromo(Promocion promocion) {
 		try {
 			String sql = "SELECT id FROM promociones WHERE nombre_promo = ?";
 			Connection conn = ConnectionProvider.getConnection();
@@ -340,26 +341,4 @@ public class PromocionDAOImpl implements PromocionDAO {
 		}
 	}
 	
-	private int obtenerIdAtraccion(Atraccion atraccion) {
-		try {
-			String sql = "SELECT id FROM atracciones WHERE nombre = ?";
-			Connection conn = ConnectionProvider.getConnection();
-
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, atraccion.getNombre());
-
-			ResultSet resultado = statement.executeQuery();	
-			
-			int id = -1;
-			
-			if(resultado.next()) {
-				id = resultado.getInt("id");
-			}
-
-			return id;
-			 
-		} catch (Exception e) {
-			throw new MissingDataException(e);
-		}
-	}
 }

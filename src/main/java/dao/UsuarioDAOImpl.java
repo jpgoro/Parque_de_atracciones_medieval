@@ -11,6 +11,9 @@ import model.Promocion;
 import model.Sugerencia;
 import model.TipoAtraccion;
 
+import dao.AtraccionDAOImpl;
+import dao.PromocionDAOImpl;
+
 import model.Usuario;
 
 public class UsuarioDAOImpl implements UsuarioDAO {
@@ -153,25 +156,25 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			usuario.setTiempoDisponible(usuario.getTiempoDisponible()-nueva.getTiempoRequerido());
 			this.updatePresupuestoYTiempoDisponible(usuario);
 	
-			//hacer metodo para disminuir el cupo de la atraccin
+			this.updateDisminuirCupoAtraccion((Atraccion) nueva);
 			agregada = true;
 			
 			this.agregarAlItinerario(usuario, nueva);
-	//		agregada = itinerarioPersonal.aceptarSugerencia(nueva);// hay que hacer este metodo para la tabla itinerario
 		}		
 		return agregada;
 	}
 
-		private int agregarAlItinerario(Usuario usuario, Sugerencia nueva) {
+	private int agregarAlItinerario(Usuario usuario, Sugerencia nueva) {
 		try {
-			String sql = "INSERT INTO itinerario (id_usuario, id_atraccion) VALUES (?,?)"; 
-			//String sql = "UPDATE ATRACCIONES SET CUPO = ? WHERE ID = ? ";
-			Connection conn = ConnectionProvider.getConnection();
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setInt(1, this.obtenerIdUsuario(usuario)); 
-			statement.setInt(2, this.obtenerIdAtraccion(nueva));
-
-			int rows = statement.executeUpdate();
+			int rows = -1;
+			
+			if (nueva instanceof Promocion) {
+				Promocion promocion = (Promocion) nueva; // le decimos a Java que lo interprete como Promocion
+				rows = this.insertUsuarioTienePromocion(usuario, promocion);
+			} else if (nueva instanceof Atraccion) {
+				Atraccion atraccion = (Atraccion) nueva; // le decimos a Java que lo interprete como Atraccion
+				rows = this.insertUsuarioTieneAtraccion(usuario, atraccion);
+			}
 
 			return rows;
 		} catch (Exception e) {
@@ -179,52 +182,87 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		}
 		
 	}
-		
-		private int obtenerIdAtraccion(Sugerencia sugerencia) {
-			try {
-				String sql = "SELECT id FROM atracciones WHERE nombre = ?";
-				Connection conn = ConnectionProvider.getConnection();
-
-				PreparedStatement statement = conn.prepareStatement(sql);
-				statement.setString(1, sugerencia.getNombre());
-				System.out.println("nombre de la sugerencia ::::::::::::::::::::: " + sugerencia.getNombre() );
-				ResultSet resultado = statement.executeQuery();	
-				
-				int id = -1;
-				
-				if(resultado.next()) {
-					id = resultado.getInt("id");
-				}
-
-				return id;
-				 
-			} catch (Exception e) {
-				throw new MissingDataException(e);
-			}
+	
+	private int insertUsuarioTieneAtraccion(Usuario usuario, Atraccion nueva) {
+		try {
+			String sql = "INSERT INTO usuario_tiene_atraccion (id_usuario, id_atraccion) VALUES (?,?)"; 
+			
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, this.obtenerIdUsuario(usuario)); 
+			statement.setInt(2, AtraccionDAOImpl.obtenerIdAtraccion(nueva));
+			
+			int rows = statement.executeUpdate();
+			
+			return rows;
+			
+		} catch (Exception e) {
+			throw new MissingDataException(e);
 		}
-		
-		
-		private int obtenerIdUsuario(Usuario usuario) {
-			try {
-				String sql = "SELECT id FROM usuarios WHERE nombre = ?";
-				Connection conn = ConnectionProvider.getConnection();
 
-				PreparedStatement statement = conn.prepareStatement(sql);
-				statement.setString(1, usuario.getNombreDeUsuario());
-				ResultSet resultado = statement.executeQuery();	
-				
-				int id = -1;
-				
-				if(resultado.next()) {
-					id = resultado.getInt("id");
-				}
-
-				return id;
-				 
-			} catch (Exception e) {
-				throw new MissingDataException(e);
-			}
+	}
+	
+	private int insertUsuarioTienePromocion(Usuario usuario, Promocion nueva) {
+		try {
+			String sql = "INSERT INTO usuario_tiene_promocion (id_usuario, id_promocion) VALUES (?,?)"; 
+			
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, this.obtenerIdUsuario(usuario)); 
+			statement.setInt(2, PromocionDAOImpl.obtenerIdPromo(nueva));
+			
+			int rows = statement.executeUpdate();
+			
+			return rows;
+			
+		} catch (Exception e) {
+			throw new MissingDataException(e);
 		}
+
+	}
+	
+	private int updateDisminuirCupoAtraccion(Atraccion atraccion) {
+		try {
+			String sql = "UPDATE atracciones SET cupo = ? WHERE id = ?"; 
+			
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			
+			statement.setInt(1, atraccion.getCupoActual() - 1); // Disminuyo el cupo
+			statement.setInt(2, AtraccionDAOImpl.obtenerIdAtraccion(atraccion));
+			
+			int rows = statement.executeUpdate();
+			
+			return rows;
+			
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
+	
+	public int obtenerIdUsuario(Usuario usuario) {
+		try {
+			String sql = "SELECT id FROM usuarios WHERE nombre = ?";
+			Connection conn = ConnectionProvider.getConnection();
+
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, usuario.getNombreDeUsuario());
+			ResultSet resultado = statement.executeQuery();	
+				
+			int id = -1;
+				
+			if(resultado.next()) {
+				id = resultado.getInt("id");
+			}
+
+			return id;
+				 
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
+	}
 
 	private boolean puedoAceptar(Usuario usuario, Sugerencia sugerencia) {
 		Usuario unUsuario = null;
