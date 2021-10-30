@@ -155,6 +155,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 	
 			//hacer metodo para disminuir el cupo de la atraccin
 			agregada = true;
+			
 			this.agregarAlItinerario(usuario, nueva);
 	//		agregada = itinerarioPersonal.aceptarSugerencia(nueva);// hay que hacer este metodo para la tabla itinerario
 		}		
