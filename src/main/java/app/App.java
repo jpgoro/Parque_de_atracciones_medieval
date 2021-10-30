@@ -32,11 +32,12 @@ public class App {
 		UsuarioDAO usuarioDAO = DAOFactory.getUsuarioDAO();
 		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionesDAO();
 		PromocionDAO promocionDAO = DAOFactory.getPromocionesDAO();
+
 		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
 		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
 		
 		promociones= promocionDAO.findAll();
-
+		
 
 		// PARA PROBAR EL PROMOCION DAO:
 		List<Atraccion> atraccionesContenidas = new LinkedList<Atraccion>();
