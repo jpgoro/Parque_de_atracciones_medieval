@@ -190,7 +190,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
-			statement.setInt(1, this.obtenerIdUsuario(usuario)); 
+			statement.setInt(1, obtenerIdUsuario(usuario)); 
 			statement.setInt(2, AtraccionDAOImpl.obtenerIdAtraccion(nueva));
 			
 			int rows = statement.executeUpdate();
@@ -210,7 +210,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			Connection conn = ConnectionProvider.getConnection();
 			PreparedStatement statement = conn.prepareStatement(sql);
 			
-			statement.setInt(1, this.obtenerIdUsuario(usuario)); 
+			statement.setInt(1, obtenerIdUsuario(usuario)); 
 			statement.setInt(2, PromocionDAOImpl.obtenerIdPromo(nueva));
 			
 			int rows = statement.executeUpdate();
@@ -242,7 +242,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		}
 	}
 	
-	public int obtenerIdUsuario(Usuario usuario) {
+	public static int obtenerIdUsuario(Usuario usuario) {
 		try {
 			String sql = "SELECT id FROM usuarios WHERE nombre = ?";
 			Connection conn = ConnectionProvider.getConnection();
@@ -293,8 +293,24 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 
 	@Override
 	public Usuario findByNombre(String nombre) {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			String sql = "SELECT * FROM usuarios WHERE nombre = ?";
+			
+			Connection conn = ConnectionProvider.getConnection();
+			PreparedStatement statement = conn.prepareStatement(sql);
+			statement.setString(1, nombre);
+			ResultSet resultados = statement.executeQuery();
+
+			Usuario usuario = null;
+
+			if (resultados.next()) {
+				usuario = toUsuario(resultados);
+			}
+
+			return usuario;
+		} catch (Exception e) {
+			throw new MissingDataException(e);
+		}
 	}
 
 	
