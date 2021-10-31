@@ -30,7 +30,7 @@ public class UsuarioDAOTest {
 	}
 	
 	@Test
-	public void insertaUnaAtraccion() {
+	public void insertaUnUsuario() {
 		usuarioDAO.insert(userTest);
 		
 		// Si devuelve -1, significa que no se agregó.
@@ -38,7 +38,7 @@ public class UsuarioDAOTest {
 	}
 	
 	@Test
-	public void eliminaUnaAtraccion() {
+	public void eliminaUnUsuario() {
 		usuarioDAO.insert(userTest);
 		
 		// Verifica que se haya agregado.
