@@ -11,7 +11,6 @@ import dao.AtraccionDAO;
 import dao.DAOFactory;
 import dao.PromocionDAO;
 import dao.UsuarioDAO;
-import model.AdministradorArchivos;
 import model.Atraccion;
 import model.ComparadorDeSugerencias;
 import model.Promocion;
@@ -112,7 +111,7 @@ public class App {
  				TimeUnit.SECONDS.sleep(2); // Pausa para que se lean bien los mensajes del programa
 				System.out.println("-----------------------------------------------------------------------------------");
 			} while(itr.hasNext() && !opcion.equalsIgnoreCase("q"));
-			AdministradorArchivos.escribirUsuario(usuario);
+			//AdministradorArchivos.escribirUsuario(usuario);
 		}
 		System.out.println("------------------ Atencion: No hay mas usuarios en el sistema. Fin del proceso ------------------");
 		in.close();
