@@ -274,8 +274,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 		
 	@Override
 	public int update(Usuario usuario) {
-		return 0;
-/*		try {
+		try {
 			String sql = "UPDATE USUARIOS SET (PRESUPUESTO,TIEMPO_DISPONIBLE) = (?,?) WHERE DNI = ?";
 			Connection conn = ConnectionProvider.getConnection();
 
@@ -288,7 +287,7 @@ public class UsuarioDAOImpl implements UsuarioDAO {
 			return rows;
 		} catch (Exception e) {
 			throw new MissingDataException(e);
-		}*/
+		}
 	}
 
 	@Override
