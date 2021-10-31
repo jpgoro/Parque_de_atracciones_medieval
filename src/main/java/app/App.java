@@ -14,9 +14,7 @@ import dao.UsuarioDAO;
 import model.Atraccion;
 import model.ComparadorDeSugerencias;
 import model.Promocion;
-import model.PromocionAbsoluta;
 import model.Sugerencia;
-import model.TipoAtraccion;
 import model.Usuario;
 
 public class App {
@@ -28,29 +26,14 @@ public class App {
 	public static void main(String[] args) throws Exception {
 		
 		// Levanto los datos desde los archivos
-		UsuarioDAO usuarioDAO = DAOFactory.getUsuarioDAO();
-		AtraccionDAO atraccionDAO = DAOFactory.getAtraccionesDAO();
-		PromocionDAO promocionDAO = DAOFactory.getPromocionesDAO();
+		UsuarioDAO usuarioDAO 		= DAOFactory.getUsuarioDAO();
+		AtraccionDAO atraccionDAO 	= DAOFactory.getAtraccionesDAO();
+		PromocionDAO promocionDAO 	= DAOFactory.getPromocionesDAO();
 
-		usuarios = usuarioDAO.findAll();// devuelve una linkedlist de Usuario
-		atracciones= atraccionDAO.findAll();// devuelve una linkedlist de Atraccion
+		usuarios = usuarioDAO.findAll();	 // devuelve una linkedlist de Usuario
+		atracciones= atraccionDAO.findAll(); // devuelve una linkedlist de Atraccion
+		promociones= promocionDAO.findAll(); // devuelve una linkedlist de Promocion
 		
-		promociones= promocionDAO.findAll();
-		
-
-		// PARA PROBAR EL PROMOCION DAO:
-		List<Atraccion> atraccionesContenidas = new LinkedList<Atraccion>();
-		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "Moria", 999, 999, 999));
-		atraccionesContenidas.add(new Atraccion(TipoAtraccion.AVENTURA, "ATRACCION EN PROMO PRUEBA 2", 999, 999, 999));
-		
-		promocionDAO.insert(new PromocionAbsoluta(TipoAtraccion.AVENTURA, "Pack PRUEBA 2", atraccionesContenidas,-1));
-		
-		
-		
-		//	usuarios    = AdministradorArchivos.leerUsuarios();
-	//	atracciones = AdministradorArchivos.leerAtracciones();
-	//	promociones = AdministradorArchivos.leerPromociones();
-
 		// Preparo para leer desde la consola 
 		Scanner in = new Scanner(System.in);
 		String opcion = null;
@@ -91,7 +74,6 @@ public class App {
 							 mensaje = "##################################################################################\n"
 									 + "##                Lo sentimos, no se pudo efectual la compra                    ##\n"
 									 + "##################################################################################";
-						
 						break;
 						
 					case "n":
@@ -111,26 +93,8 @@ public class App {
  				TimeUnit.SECONDS.sleep(2); // Pausa para que se lean bien los mensajes del programa
 				System.out.println("-----------------------------------------------------------------------------------");
 			} while(itr.hasNext() && !opcion.equalsIgnoreCase("q"));
-			//AdministradorArchivos.escribirUsuario(usuario);
 		}
 		System.out.println("------------------ Atencion: No hay mas usuarios en el sistema. Fin del proceso ------------------");
 		in.close();
-	}
-	
-	public static List<Atraccion> traerAtracciones(String[] nombres){
-		/*
-		 * Dado un array de nombres, devuelve una lista con las atracciones y todos sus atributos
-		 */
-		List<Atraccion> atrac =  new LinkedList<Atraccion>();
-		
-		for (int i = 0; i < nombres.length; i++) {
-			for(int j = 0; j < atracciones.size(); j++) {
-				if(atracciones.get(j).getNombre().contains(nombres[i])) {
-					atrac.add(atracciones.get(j));
-				}
-			}
-		}
-		
-		return atrac;
 	}
 }
