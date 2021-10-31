@@ -45,5 +45,16 @@ public class AtraccionDAOTest {
 		assertEquals(-1, AtraccionDAOImpl.obtenerIdAtraccion(test));
 
 	}
+	
+	@Test
+	public void encuentraPorNombre() {
+		atraccionDAO.insert(test);
 
+		Atraccion testAtraccion = atraccionDAO.findByNombre("Atraccion Test");
+		
+		assertEquals("Atraccion Test", testAtraccion.getNombre());
+	
+		// La borro
+		atraccionDAO.delete(test); 
+	}
 }
